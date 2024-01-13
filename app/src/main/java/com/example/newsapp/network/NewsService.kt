@@ -13,18 +13,17 @@ import retrofit2.http.Query
 interface NewsService {
 
     @GET("everything")
-    suspend fun getNews(
+    suspend fun getNews (
         @Query("q") query: String,
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("sortBy") sortBy: String,
-        @Query("apiKey") apiKey: String = "668ceb68185b4fe68c5a0a9ea453324a"
     ): NewsApiResponse
 
     companion object {
         private const val BASE_URL = "https://newsapi.org/v2/"
 
-        private const val apiKey = ""
+        private const val apiKey = "668ceb68185b4fe68c5a0a9ea453324a"
 
         fun create(): NewsService{
             val client = OkHttpClient.Builder()
@@ -33,7 +32,7 @@ interface NewsService {
                     val originalHttpUrl: HttpUrl = original.url()
 
                     val url = originalHttpUrl.newBuilder()
-                        .addQueryParameter("key", apiKey)
+                        .addQueryParameter("apiKey", apiKey)
                         .build()
 
                     val request = original.newBuilder()
