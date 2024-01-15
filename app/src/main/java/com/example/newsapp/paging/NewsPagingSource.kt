@@ -1,0 +1,43 @@
+package com.example.newsapp.paging
+
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import com.example.newsapp.network.NewsService
+import com.example.newsapp.network.classes.Article
+import com.example.newsapp.repositories.NETWORK_PAGE_SIZE
+
+
+private const val NEWS_STARTING_PAGE_INDEX = 1
+class NewsPagingSource(
+    private val query: String,
+    private val newsService: NewsService
+) : PagingSource<Int, Article>() {
+
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
+        val pageIndex = params.key ?: NEWS_STARTING_PAGE_INDEX
+        return try {
+            val response = newsService.getNews(query = query, page = pageIndex, pageSize = params.loadSize)
+            val articles = response.articles
+
+            val nextKey = if(articles.isEmpty()) {
+                null
+            } else {
+                pageIndex + (params.loadSize / NETWORK_PAGE_SIZE)
+            }
+
+            LoadResult.Page(
+                data = articles,
+                prevKey = if(pageIndex == NEWS_STARTING_PAGE_INDEX) null else pageIndex - 1,
+                nextKey = nextKey
+            )
+        } catch (exception: Exception) {
+            LoadResult.Error(exception)
+        }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition = anchorPosition)?.prevKey
+        }
+    }
+}

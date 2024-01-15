@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.newsapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -52,6 +52,8 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     implementation("com.google.dagger:hilt-android:2.50")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
 
     testImplementation("junit:junit:4.13.2")

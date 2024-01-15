@@ -18,14 +18,15 @@ class NewsListViewModel @Inject constructor(
 
     init {
         Log.d("myLogs", "init")
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             newsList = newsRepository.getNews()
             var i = 0
+            //Log.d("myLogs", newsList?.totalResults!!.toString())
             for(item in newsList?.articles!!) {
                 Log.d("myLogs", item.author!!)
                 i++
                 if(i > 20) break
             }
-        }
+        }*/
     }
 }

@@ -7,17 +7,21 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
+import java.time.LocalDateTime
+
+val LocalDateTime.simpleDateFormat
+    get() = "${this.year}-${this.monthValue}-${this.dayOfMonth}"
 
 interface NewsService {
-
     @GET("everything")
     suspend fun getNews (
         @Query("q") query: String,
-        @Query("from") from: String,
-        @Query("to") to: String,
-        @Query("sortBy") sortBy: String,
+        @Query("from") from: String = LocalDateTime.now().simpleDateFormat,
+        @Query("to") to: String = LocalDateTime.now().minusDays(1).simpleDateFormat,
+        @Query("sortBy") sortBy: String = "popularity",
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
     ): NewsApiResponse
 
     companion object {
@@ -25,7 +29,7 @@ interface NewsService {
 
         private const val apiKey = "668ceb68185b4fe68c5a0a9ea453324a"
 
-        fun create(): NewsService{
+        fun create(): NewsService {
             val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val original: Request = chain.request()
