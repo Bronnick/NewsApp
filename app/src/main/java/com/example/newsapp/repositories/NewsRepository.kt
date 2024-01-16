@@ -1,5 +1,6 @@
 package com.example.newsapp.repositories
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -17,6 +18,7 @@ class NewsRepository @Inject constructor(
 ) {
 
     fun getNews(query: String): Flow<PagingData<Article>> {
+        Log.d("myLogs", "pager flow returned")
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = { NewsPagingSource(query, newsService) }

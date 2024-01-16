@@ -1,5 +1,6 @@
 package com.example.newsapp.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.newsapp.network.NewsService
@@ -16,8 +17,10 @@ class NewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
         val pageIndex = params.key ?: NEWS_STARTING_PAGE_INDEX
         return try {
-            val response = newsService.getNews(query = query, page = pageIndex, pageSize = params.loadSize)
+            val response = newsService.getNews(query = query, page = 1, pageSize = NETWORK_PAGE_SIZE)
             val articles = response.articles
+
+            val prevKey = if(pageIndex == NEWS_STARTING_PAGE_INDEX) null else pageIndex - 1
 
             val nextKey = if(articles.isEmpty()) {
                 null
@@ -25,19 +28,28 @@ class NewsPagingSource(
                 pageIndex + (params.loadSize / NETWORK_PAGE_SIZE)
             }
 
+            for(item in articles) {
+                Log.d("myLogs", "paging source loaded: ${item.author}")
+            }
+
             LoadResult.Page(
                 data = articles,
-                prevKey = if(pageIndex == NEWS_STARTING_PAGE_INDEX) null else pageIndex - 1,
+                prevKey = prevKey,
                 nextKey = nextKey
-            )
+            ).also {
+                Log.d("myLogs", "prevKey: $prevKey, nextKey: $nextKey")
+            }
         } catch (exception: Exception) {
+            Log.d("myLogs", "paging source loaded with error ${exception.message}")
             LoadResult.Error(exception)
         }
     }
 
     override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
+        Log.d("myLogs", "get refresh key")
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition = anchorPosition)?.prevKey
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition((anchorPosition))?.nextKey?.minus(1)
         }
     }
 }

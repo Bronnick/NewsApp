@@ -10,12 +10,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     //val apiKey = "668ceb68185b4fe68c5a0a9ea453324a"
 
-    val newsListViewModel by viewModels<NewsListViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        newsListViewModel.newsList
+
     }
 }

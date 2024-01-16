@@ -1,5 +1,6 @@
 package com.example.newsapp.network
 
+import android.util.Log
 import com.example.example.NewsApiResponse
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
@@ -14,14 +15,15 @@ val LocalDateTime.simpleDateFormat
     get() = "${this.year}-${this.monthValue}-${this.dayOfMonth}"
 
 interface NewsService {
+
     @GET("everything")
     suspend fun getNews (
         @Query("q") query: String,
-        @Query("from") from: String = LocalDateTime.now().simpleDateFormat,
-        @Query("to") to: String = LocalDateTime.now().minusDays(1).simpleDateFormat,
+        @Query("from") from: String = LocalDateTime.now().minusDays(2).simpleDateFormat.also { Log.d("myLogs", it.toString()) },
+        @Query("to") to: String = LocalDateTime.now().simpleDateFormat.also { Log.d("myLogs", it.toString()) },
         @Query("sortBy") sortBy: String = "popularity",
-        @Query("page") page: Int,
-        @Query("pageSize") pageSize: Int
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 10
     ): NewsApiResponse
 
     companion object {
