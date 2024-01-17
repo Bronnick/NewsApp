@@ -2,6 +2,7 @@ package com.example.newsapp.ui.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -13,7 +14,9 @@ import com.example.newsapp.databinding.NewsListItemBinding
 import com.example.newsapp.network.classes.Article
 import java.io.File
 
-class NewsAdapter : PagingDataAdapter<Article, ArticleViewHolder>(ArticleDiffCallback()){
+class NewsAdapter(
+    private val onItemClick: (String?) -> Unit
+) : PagingDataAdapter<Article, ArticleViewHolder>(ArticleDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         Log.d("myLogs", "view holder created")
@@ -26,7 +29,7 @@ class NewsAdapter : PagingDataAdapter<Article, ArticleViewHolder>(ArticleDiffCal
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         Log.d("myLogs", "view holder binded")
-        holder.bind(getItem(position) ?: Article())
+        holder.bind(getItem(position) ?: Article(), onItemClick)
     }
 }
 
@@ -45,12 +48,18 @@ class ArticleViewHolder(
     val binding: NewsListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(article: Article) {
+    fun bind(
+        article: Article,
+        onItemClick: (String?) -> Unit
+    ) {
         binding.articleName.text = article.title
         binding.author.text = article.author
         binding.articlePoster.load(article.urlToImage ?: R.drawable.image_not_found) {
             crossfade(durationMillis = 1000)
             transformations(RoundedCornersTransformation(12.5f))
+        }
+        binding.root.setOnClickListener {
+            onItemClick(article.url)
         }
     }
 }

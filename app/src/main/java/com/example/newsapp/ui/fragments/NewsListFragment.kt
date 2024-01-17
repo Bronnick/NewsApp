@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentNewsListBinding
 import com.example.newsapp.ui.adapters.NewsAdapter
@@ -29,25 +30,26 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentNewsListBinding.inflate(inflater, container, false)
-        Log.d("myLogs", "create view ${binding!!.rvNews}")
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.rvNews?.setOnClickListener {
-            Log.d("myLogs", "list clicked")
-        }.also { Log.d("mylogs", "click listener set") }
-
         initView()
         collectUiState()
     }
 
     private fun initView() {
-        adapter = NewsAdapter()
+        adapter = NewsAdapter { url ->
+            findNavController().navigate(
+                R.id.action_newsListFragment_to_articleWebViewFragment,
+                Bundle().apply {
+                    putString("url", url)
+                }
+            )
+        }
         binding?.rvNews?.adapter = adapter
-        Log.d("myLogs", "init view")
     }
 
     private fun collectUiState() {

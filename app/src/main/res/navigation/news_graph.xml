@@ -9,5 +9,19 @@
         android:id="@+id/newsListFragment"
         android:name="com.example.newsapp.ui.fragments.NewsListFragment"
         android:label="NewsListFragment"
-        tools:layout="@layout/fragment_news_list"/>
+        tools:layout="@layout/fragment_news_list">
+        <action
+            android:id="@+id/action_newsListFragment_to_articleWebViewFragment"
+            app:destination="@id/articleWebViewFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/newsListFragment"
+            app:enterAnim="@anim/slide_in_right_alpha"
+            app:exitAnim="@anim/slide_out_left_alpha"
+            app:popEnterAnim="@anim/slide_in_left_alpha"
+            app:popExitAnim="@anim/slide_out_right_alpha" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleWebViewFragment"
+        android:name="com.example.newsapp.ui.fragments.ArticleWebViewFragment"
+        android:label="ArticleWebViewFragment" />
 </navigation>
