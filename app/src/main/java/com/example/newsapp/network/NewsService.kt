@@ -35,7 +35,7 @@ interface NewsService {
             val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val original: Request = chain.request()
-                    val originalHttpUrl: HttpUrl = original.url()
+                    val originalHttpUrl: HttpUrl = original.url
 
                     val url = originalHttpUrl.newBuilder()
                         .addQueryParameter("apiKey", apiKey)

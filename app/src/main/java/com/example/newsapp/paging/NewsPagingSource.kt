@@ -17,7 +17,7 @@ class NewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
         val pageIndex = params.key ?: NEWS_STARTING_PAGE_INDEX
         return try {
-            val response = newsService.getNews(query = query, page = 1, pageSize = NETWORK_PAGE_SIZE)
+            val response = newsService.getNews(query = query, page = pageIndex, pageSize = NETWORK_PAGE_SIZE)
             val articles = response.articles
 
             val prevKey = if(pageIndex == NEWS_STARTING_PAGE_INDEX) null else pageIndex - 1
@@ -29,7 +29,7 @@ class NewsPagingSource(
             }
 
             for(item in articles) {
-                Log.d("myLogs", "paging source loaded: ${item.author}")
+                Log.d("myLogs", "paging source loaded: ${item.urlToImage}")
             }
 
             LoadResult.Page(
