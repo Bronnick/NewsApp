@@ -18,7 +18,6 @@ class NewsRepository @Inject constructor(
 ) {
 
     fun getNews(query: String): Flow<PagingData<Article>> {
-        Log.d("myLogs", "pager flow returned")
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = { NewsPagingSource(query, newsService) }

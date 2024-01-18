@@ -19,7 +19,6 @@ class NewsAdapter(
 ) : PagingDataAdapter<Article, ArticleViewHolder>(ArticleDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
-        Log.d("myLogs", "view holder created")
         return ArticleViewHolder(
             NewsListItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -28,7 +27,6 @@ class NewsAdapter(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        Log.d("myLogs", "view holder binded")
         holder.bind(getItem(position) ?: Article(), onItemClick)
     }
 }
@@ -45,7 +43,7 @@ class ArticleDiffCallback : DiffUtil.ItemCallback<Article>() {
 }
 
 class ArticleViewHolder(
-    val binding: NewsListItemBinding
+    private val binding: NewsListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(

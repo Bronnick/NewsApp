@@ -28,10 +28,6 @@ class NewsPagingSource(
                 pageIndex + (params.loadSize / NETWORK_PAGE_SIZE)
             }
 
-            for(item in articles) {
-                Log.d("myLogs", "paging source loaded: ${item.urlToImage}")
-            }
-
             LoadResult.Page(
                 data = articles,
                 prevKey = prevKey,

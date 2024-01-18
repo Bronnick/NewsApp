@@ -26,6 +26,10 @@ class NewsListViewModel @Inject constructor(
     val articles: Flow<PagingData<Article>>
         get() = _articles.filterNotNull()*/
 
+    val articles: Flow<PagingData<Article>> =
+        newsRepository.getNews("Apple")
+            .cachedIn(viewModelScope)
+
     init {
         Log.d("myLogs", "init")
 
@@ -33,7 +37,8 @@ class NewsListViewModel @Inject constructor(
 
     fun getArticles(query: String): Flow<PagingData<Article>> {
         Log.d("myLogs", "articles called")
-        return newsRepository.getNews(query).cachedIn(viewModelScope)
+        return newsRepository.getNews(query)
+            .cachedIn(viewModelScope)
     }
 
     /*fun getArticles(query: String): Flow<PagingData<Article>> {
