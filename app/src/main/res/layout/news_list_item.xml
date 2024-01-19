@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="4dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/borders"
     android:orientation="vertical">
 
     <ImageView
@@ -14,20 +16,19 @@
         app:layout_constraintBottom_toTopOf="@+id/article_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </ImageView>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/article_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Default"
+        android:fontFamily="sans-serif-condensed-medium"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/author"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Default"
         android:textSize="20sp" />

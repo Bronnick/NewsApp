@@ -31,12 +31,11 @@ class NewsListViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
     init {
-        Log.d("myLogs", "init")
 
     }
 
     fun getArticles(query: String) {
-        Log.d("myLogs", "articles called")
+
         articles = newsRepository.getNews(query)
             .cachedIn(viewModelScope)
     }

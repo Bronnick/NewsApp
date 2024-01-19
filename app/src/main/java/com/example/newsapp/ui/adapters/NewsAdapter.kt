@@ -51,7 +51,7 @@ class ArticleViewHolder(
         onItemClick: (String?) -> Unit
     ) {
         binding.articleName.text = article.title
-        binding.author.text = article.author
+        binding.author.text = "by ${article.author}"
         binding.articlePoster.load(article.urlToImage ?: R.drawable.image_not_found) {
             crossfade(durationMillis = 1000)
             transformations(RoundedCornersTransformation(12.5f))
