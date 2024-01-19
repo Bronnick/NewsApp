@@ -19,8 +19,8 @@ interface NewsService {
     @GET("everything")
     suspend fun getNews (
         @Query("q") query: String,
-        @Query("from") from: String = LocalDateTime.now().minusDays(2).simpleDateFormat.also { Log.d("myLogs", it.toString()) },
-        @Query("to") to: String = LocalDateTime.now().simpleDateFormat.also { Log.d("myLogs", it.toString()) },
+        @Query("from") from: String = LocalDateTime.now().minusDays(2).simpleDateFormat,
+        @Query("to") to: String = LocalDateTime.now().simpleDateFormat,
         @Query("sortBy") sortBy: String = "popularity",
         @Query("page") page: Int = 1,
         @Query("pageSize") pageSize: Int = 10

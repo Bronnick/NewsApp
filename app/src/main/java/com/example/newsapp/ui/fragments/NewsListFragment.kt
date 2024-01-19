@@ -16,6 +16,8 @@ import com.example.newsapp.databinding.FragmentNewsListBinding
 import com.example.newsapp.ui.adapters.NewsAdapter
 import com.example.newsapp.view_models.NewsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -27,6 +29,9 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
 
     private val newsListViewModel: NewsListViewModel by viewModels()
     private var adapter: NewsAdapter? = null
+
+    private var collectUiStateJob: Job? = null
+    private var cancellationJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,15 +74,37 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
             )
         }
         binding?.rvNews?.adapter = adapter
+
+        binding?.buttonStartSearch?.setOnClickListener {
+            val query = binding?.etQuery?.text.toString()
+            Log.d("myLogs", "Clicked: $query")
+            newsListViewModel.getArticles(query)
+            collectUiState()
+            //adapter?.refresh()
+        }
     }
 
     private fun collectUiState(scrollPosition: Int = -1) {
-        viewLifecycleOwner.lifecycleScope.launch {
+        collectUiStateJob?.let { collectUiStateJob ->
+            cancellationJob = viewLifecycleOwner.lifecycleScope.launch {
+                collectUiStateJob.cancelAndJoin()
+            }
+        }
+
+        collectUiStateJob = viewLifecycleOwner.lifecycleScope.launch {
+            cancellationJob?.let { job ->
+                job.join()
+                Log.d("myLogs", "cancelled job")
+            }
+            //newsListViewModel.getArticles()
             newsListViewModel.articles.collectLatest { articles ->
                 Log.d("myLogs", articles.toString())
+                //adapter?.refresh()
                 adapter?.submitData(articles)
+                binding?.rvNews?.scrollToPosition(scrollPosition)
+                Log.d("myLogs", "finished collecting")
             }
-            binding?.rvNews?.scrollToPosition(scrollPosition)
+            Log.d("myLogs", "finished collecting everything")
         }
     }
 

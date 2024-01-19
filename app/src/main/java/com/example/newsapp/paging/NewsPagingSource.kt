@@ -42,7 +42,6 @@ class NewsPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
-        Log.d("myLogs", "get refresh key")
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition((anchorPosition))?.nextKey?.minus(1)
