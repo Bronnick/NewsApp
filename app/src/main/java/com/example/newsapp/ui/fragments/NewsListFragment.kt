@@ -45,23 +45,8 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("myLogs", "view created")
         initView()
-        Log.d("myLogs", "state restored: ${savedInstanceState?.getInt(RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY)}")
-        collectUiState(savedInstanceState?.getInt(RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY) ?: -1)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        Log.d("myLogs", "view state restored")
-        savedInstanceState?.let { bundle ->
-            //Log.d("myLogs", "state restored: ${bundle.getInt(RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY)}")
-            /*binding?.rvNews?.layoutManager?.scrollToPosition(
-                bundle.getInt(RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY)
-            ).also {
-                Log.d("myLogs", "scrolled to position ${bundle.getInt(RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY)}")
-            }*/
-        }
+        collectUiState()
     }
 
     private fun initView() {
@@ -77,14 +62,12 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
 
         binding?.buttonStartSearch?.setOnClickListener {
             val query = binding?.etQuery?.text.toString()
-            Log.d("myLogs", "Clicked: $query")
             newsListViewModel.getArticles(query)
             collectUiState()
-            //adapter?.refresh()
         }
     }
 
-    private fun collectUiState(scrollPosition: Int = -1) {
+    private fun collectUiState() {
         collectUiStateJob?.let { collectUiStateJob ->
             cancellationJob = viewLifecycleOwner.lifecycleScope.launch {
                 collectUiStateJob.cancelAndJoin()
@@ -92,30 +75,10 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
         }
 
         collectUiStateJob = viewLifecycleOwner.lifecycleScope.launch {
-            cancellationJob?.let { job ->
-                job.join()
-                Log.d("myLogs", "cancelled job")
-            }
-            //newsListViewModel.getArticles()
+            cancellationJob?.join()
             newsListViewModel.articles.collectLatest { articles ->
-                Log.d("myLogs", articles.toString())
-                //adapter?.refresh()
                 adapter?.submitData(articles)
-                binding?.rvNews?.scrollToPosition(scrollPosition)
-                Log.d("myLogs", "finished collecting")
             }
-            Log.d("myLogs", "finished collecting everything")
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.d("myLogs", "state saved")
-        binding?.rvNews?.layoutManager?.let {
-            outState.putInt(
-                RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY,
-                (it as LinearLayoutManager).findFirstVisibleItemPosition()
-            )
         }
     }
 
