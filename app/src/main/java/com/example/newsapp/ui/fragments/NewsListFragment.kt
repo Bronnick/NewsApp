@@ -1,5 +1,7 @@
 package com.example.newsapp.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -51,14 +53,19 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
     }
 
     private fun initView() {
-        adapter = NewsAdapter { url ->
-            findNavController().navigate(
-                R.id.action_newsListFragment_to_articleWebViewFragment,
-                Bundle().apply {
-                    putString("url", url)
-                }
-            )
-        }
+        adapter = NewsAdapter (
+            onItemClick = { url ->
+                findNavController().navigate(
+                    R.id.action_newsListFragment_to_articleWebViewFragment,
+                    Bundle().apply {
+                        putString("url", url)
+                    }
+                )
+            },
+            onOpenInBrowserButtonClick = { url ->
+                openArticleInBrowser(url)
+            }
+        )
         binding?.rvNews?.adapter = adapter
 
         binding?.buttonStartSearch?.setOnClickListener {
@@ -67,11 +74,14 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
             collectUiState()
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            newsListViewModel.getInitialDataJob?.join()
+            binding?.etQuery?.setText(newsListViewModel.query)
+        }
 
-        binding?.etQuery?.setText(newsListViewModel.query)
         binding?.etQuery?.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                newsListViewModel.updateUserQuery(text.toString().also{Log.d("myLogs", it)})
+                newsListViewModel.updateUserQuery(text.toString())
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -103,6 +113,12 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
                 adapter?.submitData(articles)
             }
         }
+    }
+
+    fun openArticleInBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

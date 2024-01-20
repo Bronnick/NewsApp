@@ -15,7 +15,8 @@ import com.example.newsapp.network.classes.Article
 import java.io.File
 
 class NewsAdapter(
-    private val onItemClick: (String?) -> Unit
+    private val onItemClick: (String?) -> Unit,
+    private val onOpenInBrowserButtonClick: (String) -> Unit
 ) : PagingDataAdapter<Article, ArticleViewHolder>(ArticleDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -27,7 +28,7 @@ class NewsAdapter(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.bind(getItem(position) ?: Article(), onItemClick)
+        holder.bind(getItem(position) ?: Article(), onItemClick, onOpenInBrowserButtonClick)
     }
 }
 
@@ -48,13 +49,19 @@ class ArticleViewHolder(
 
     fun bind(
         article: Article,
-        onItemClick: (String?) -> Unit
+        onItemClick: (String?) -> Unit,
+        onOpenInBrowserButtonClick: (String) -> Unit
     ) {
         binding.articleName.text = article.title
         binding.author.text = "by ${article.author}"
         binding.articlePoster.load(article.urlToImage ?: R.drawable.image_not_found) {
             crossfade(durationMillis = 1000)
             transformations(RoundedCornersTransformation(12.5f))
+        }
+        article.url?.let { url ->
+            binding.buttonOpenBrowser.setOnClickListener {
+                onOpenInBrowserButtonClick(url)
+            }
         }
         binding.root.setOnClickListener {
             onItemClick(article.url)

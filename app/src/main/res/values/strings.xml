@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="view_in_browser">View in browser</string>
 </resources>
