@@ -13,6 +13,7 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 class DatastoreModule {
+
     @Provides
     fun provideDatastore(@ApplicationContext applicationContext: Context): DataStore<Preferences> {
         return applicationContext.dataStore

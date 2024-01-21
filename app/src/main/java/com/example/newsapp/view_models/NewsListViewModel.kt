@@ -28,10 +28,6 @@ class NewsListViewModel @Inject constructor(
     private val datastoreRepository: DatastoreRepository
 ) : ViewModel() {
 
-    /*private val _articles = MutableStateFlow<PagingData<Article>?>(null)
-    val articles: Flow<PagingData<Article>>
-        get() = _articles.filterNotNull()*/
-
     var query: String? = null
 
     var articles: Flow<PagingData<Article>>? = null

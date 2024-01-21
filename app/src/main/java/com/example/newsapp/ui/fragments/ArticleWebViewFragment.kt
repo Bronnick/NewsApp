@@ -25,6 +25,5 @@ class ArticleWebViewFragment : Fragment(R.layout.article_web_view_fragment) {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.webBrowser?.loadUrl(arguments?.getString("url")!!)
-        //binding?.webBrowser?.settings?.javaScriptEnabled = true
     }
 }

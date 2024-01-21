@@ -34,7 +34,6 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
 
     private var collectUiStateJob: Job? = null
     private var collectUiStateCancellationJob: Job? = null
-    private var getInitialDataCancellationJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,17 +94,9 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
         collectUiStateJob?.let { collectUiStateJob ->
             collectUiStateCancellationJob = viewLifecycleOwner.lifecycleScope.launch {
                 collectUiStateJob.cancelAndJoin()
-                Log.d("myLogs", "collectUiState cancelled")
             }
         }
 
-        /*newsListViewModel.getInitialDataJob?.let { getInitialDataJob ->
-            getInitialDataCancellationJob = viewLifecycleOwner.lifecycleScope.launch {
-                getInitialDataJob.cancelAndJoin()
-                Log.d("myLogs", "getInitialData cancelled")
-            }
-        }
-*/
         collectUiStateJob = viewLifecycleOwner.lifecycleScope.launch {
             collectUiStateCancellationJob?.join()
             newsListViewModel.getInitialDataJob?.join()
@@ -115,7 +106,7 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
         }
     }
 
-    fun openArticleInBrowser(url: String) {
+    private fun openArticleInBrowser(url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         startActivity(intent)

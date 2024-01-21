@@ -23,8 +23,4 @@ class NewsRepository @Inject constructor(
             pagingSourceFactory = { NewsPagingSource(query, newsService) }
         ).flow
     }
-
-    /*suspend fun getNews(): NewsApiResponse {
-        return newsService.getNews(query = "apple", page = 1, pageSize = 30)
-    }*/
 }

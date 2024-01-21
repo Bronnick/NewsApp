@@ -32,11 +32,8 @@ class NewsPagingSource(
                 data = articles,
                 prevKey = prevKey,
                 nextKey = nextKey
-            ).also {
-                Log.d("myLogs", "prevKey: $prevKey, nextKey: $nextKey")
-            }
+            )
         } catch (exception: Exception) {
-            Log.d("myLogs", "paging source loaded with error ${exception.message}")
             LoadResult.Error(exception)
         }
     }
