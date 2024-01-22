@@ -1,5 +1,6 @@
 package com.example.newsapp.ui.fragments
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +9,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -72,6 +75,18 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
             newsListViewModel.getArticles(query)
             collectUiState()
         }
+
+        binding?.etQuery?.onFocusChangeListener =
+            OnFocusChangeListener { _, focused ->
+                val animation = if(focused) {
+                    ObjectAnimator.ofFloat(binding?.etQuery, "textSize", 18f, 25f)
+                } else {
+                    ObjectAnimator.ofFloat(binding?.etQuery, "textSize", 25f, 18f)
+                }
+                animation.duration = 700L
+                animation.interpolator = AccelerateInterpolator()
+                animation.start()
+            }
 
         viewLifecycleOwner.lifecycleScope.launch {
             newsListViewModel.getInitialDataJob?.join()

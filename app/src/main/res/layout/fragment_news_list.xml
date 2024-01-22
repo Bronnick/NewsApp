@@ -16,7 +16,8 @@
             android:id="@+id/etQuery"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="0.9">
+            android:layout_weight="0.87"
+            android:textSize="18sp">
 
         </EditText>
 
@@ -24,7 +25,7 @@
             android:id="@+id/buttonStartSearch"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="0.1"
+            android:layout_weight="0.13"
             android:background="@drawable/baseline_search_24">
 
         </Button>
