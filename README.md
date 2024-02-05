@@ -17,6 +17,7 @@ ___
 + View binding
 + Jetpack
   + Datastore
+  + Navigation component
 + Retrofit for networking
 + Kotlin Coroutines for asynchronous work
 + Coil for loading images asynchronously
