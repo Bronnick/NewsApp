@@ -26,4 +26,6 @@ class ArticleWebViewFragment : Fragment(R.layout.article_web_view_fragment) {
 
         binding?.webBrowser?.loadUrl(arguments?.getString("url")!!)
     }
+
+
 }
