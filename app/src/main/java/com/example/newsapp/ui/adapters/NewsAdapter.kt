@@ -16,7 +16,8 @@ import java.io.File
 
 class NewsAdapter(
     private val onItemClick: (String?) -> Unit,
-    private val onOpenInBrowserButtonClick: (String) -> Unit
+    private val onOpenInBrowserButtonClick: (String) -> Unit,
+    private val onShareButtonClick: (String) -> Unit
 ) : PagingDataAdapter<Article, ArticleViewHolder>(ArticleDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -28,7 +29,7 @@ class NewsAdapter(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.bind(getItem(position) ?: Article(), onItemClick, onOpenInBrowserButtonClick)
+        holder.bind(getItem(position) ?: Article(), onItemClick, onOpenInBrowserButtonClick, onShareButtonClick)
     }
 }
 
@@ -50,7 +51,8 @@ class ArticleViewHolder(
     fun bind(
         article: Article,
         onItemClick: (String?) -> Unit,
-        onOpenInBrowserButtonClick: (String) -> Unit
+        onOpenInBrowserButtonClick: (String) -> Unit,
+        onShareButtonClick: (String) -> Unit
     ) {
         binding.articleName.text = article.title
         binding.author.text = "by ${article.author}"
@@ -61,6 +63,9 @@ class ArticleViewHolder(
         article.url?.let { url ->
             binding.buttonOpenBrowser.setOnClickListener {
                 onOpenInBrowserButtonClick(url)
+            }
+            binding.buttonShareOnFacebook.setOnClickListener {
+                onShareButtonClick(url)
             }
         }
         binding.root.setOnClickListener {

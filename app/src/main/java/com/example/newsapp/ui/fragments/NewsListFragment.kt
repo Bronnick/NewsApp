@@ -20,11 +20,16 @@ import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentNewsListBinding
 import com.example.newsapp.ui.adapters.NewsAdapter
 import com.example.newsapp.view_models.NewsListViewModel
+import com.facebook.FacebookSdk
+import com.facebook.share.model.ShareLinkContent
+import com.facebook.share.model.ShareMediaContent
+import com.facebook.share.widget.ShareDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 const val RECYCLER_VIEW_CURRENT_LAST_POSITION_KEY = "last_position_key"
 
@@ -50,8 +55,12 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("myLogs", "Key is ${FacebookSdk.getApplicationSignature(requireActivity())}")
+
         initView()
         collectUiState()
+
+
     }
 
     private fun initView() {
@@ -66,6 +75,9 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
             },
             onOpenInBrowserButtonClick = { url ->
                 openArticleInBrowser(url)
+            },
+            onShareButtonClick = { url ->
+                shareArticleOnFacebook(url)
             }
         )
         binding?.rvNews?.adapter = adapter
@@ -125,6 +137,15 @@ class NewsListFragment : Fragment(R.layout.fragment_news_list) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         startActivity(intent)
+    }
+
+    private fun shareArticleOnFacebook(url: String) {
+        val content: ShareLinkContent = ShareLinkContent.Builder()
+            .setContentUrl(Uri.parse(url))
+            .build()
+
+        val shareDialog = ShareDialog(requireActivity())
+        shareDialog.show(content, ShareDialog.Mode.AUTOMATIC)
     }
 
     override fun onDestroyView() {

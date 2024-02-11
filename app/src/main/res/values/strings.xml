@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">NewsApp</string>
     <string name="view_in_browser">View in browser</string>
+    <string name="share_on_facebook">Share</string>
+    <string name="facebook_app_id">919501099684719</string>
+    <string name="facebook_client_token">67bbeeb21dbe099a32bf91f27c136590</string>
 </resources>
