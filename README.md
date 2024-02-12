@@ -23,6 +23,7 @@ ___
 + Coil for loading images asynchronously
 + Paging library
 + Hilt for dependency injection
++ Facebook SDK
 + Architecture
   + MVVM
   + Repository pattern
